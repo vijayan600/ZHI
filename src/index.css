@@ -1,0 +1,6 @@
+/* Vite entry reset — actual design tokens are in src/styles/global.css */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

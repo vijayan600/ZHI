@@ -1,0 +1,502 @@
+/* ─────────────────────────────────────────
+   ServiceCards.module.css
+   ───────────────────────────────────────── */
+
+.root {
+  position: relative;
+  width: 100%;
+  background: #07070f;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 100% 80% at 50% 50%, #0d0c1e 0%, #07070f 65%);
+}
+
+/* ── Ambient blob ── */
+.blob {
+  position: absolute;
+  width: 420px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--blob, #6366f1) 12%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: background 1.4s ease;
+}
+
+/* ── Particles ── */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { opacity: 0;    transform: translateY(0)     scale(1);   }
+  15%  { opacity: 0.45; }
+  85%  { opacity: 0.25; }
+  100% { opacity: 0;    transform: translateY(-70px) scale(0.5); }
+}
+
+/* ─────────────────────────────────────────
+   LEFT PANEL
+   ───────────────────────────────────────── */
+.leftPanel {
+  position: absolute;
+  left: 5vw;
+  bottom: 8vh;
+  top: auto;
+  transform: none;
+  z-index: 40;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lpNumber {
+  font-family: 'Courier New', monospace;
+  font-size: 3.8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.025);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.lpTag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+  transition: color 0.5s ease;
+}
+
+.lpTitle {
+  font-family: 'Courier New', 'Lucida Console', monospace;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin: 0 0 6px 0;
+}
+
+.lpPrice {
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  color: rgba(200, 210, 240, 0.42);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  margin: 0 0 14px 0;
+}
+
+.lpDivider {
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin-bottom: 14px;
+  border-radius: 1px;
+  transition: background 0.5s ease;
+}
+
+.lpNav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lpNavItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s ease;
+}
+.lpNavItem:hover { transform: translateX(5px); }
+
+.lpNavLine {
+  display: block;
+  height: 1px;
+  width: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.lpNavActive .lpNavLine {
+  width: 26px;
+  background: var(--c, #fff);
+}
+.lpNavName {
+  font-family: 'Courier New', monospace;
+  font-size: 0.60rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.16);
+  transition: color 0.3s ease;
+}
+.lpNavActive .lpNavName { color: var(--c, #fff); }
+
+/* ─────────────────────────────────────────
+   COUNTER
+   ───────────────────────────────────────── */
+.counter {
+  position: absolute;
+  top: 28px;
+  right: 4.5vw;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 50px;
+  padding: 7px 14px;
+}
+.btn {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.25);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 3px;
+  transition: color 0.2s;
+}
+.btn:hover { color: rgba(255, 255, 255, 0.80); }
+.counterInner { display: flex; align-items: baseline; gap: 5px; }
+.counterCurrent {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: color 0.5s ease;
+  min-width: 22px;
+  text-align: center;
+}
+.counterSlash {
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.14);
+}
+.counterTotal {
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.05em;
+}
+
+/* ─────────────────────────────────────────
+   TRACK
+   ───────────────────────────────────────── */
+.track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 900px;
+  transform-style: preserve-3d;
+  z-index: 10;
+  margin-left: 80px;
+}
+
+/* ─────────────────────────────────────────
+   CARD
+   ───────────────────────────────────────── */
+.card {
+  position: absolute;
+  width: 320px;
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  will-change: transform, opacity, filter, box-shadow;
+  background: #0d0d1e;
+  cursor: pointer;
+}
+
+.gloss {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background: linear-gradient(
+    130deg,
+    rgba(255,255,255,0.07) 0%,
+    rgba(255,255,255,0.015) 28%,
+    transparent 50%,
+    rgba(0,0,0,0.10) 100%
+  );
+  border-radius: inherit;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────────
+   GLITCH LAYERS
+   ───────────────────────────────────────── */
+.glitchLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  animation: none;
+  will-change: opacity, clip-path, transform;
+}
+
+.glitchR {
+  background: rgba(255, 30, 30, 0.28);
+  mix-blend-mode: screen;
+  transform: translateX(4px);
+}
+
+.glitchB {
+  background: rgba(0, 220, 255, 0.22);
+  mix-blend-mode: screen;
+  transform: translateX(-4px);
+}
+
+.cardActive .glitchR {
+  animation: glitchBurstR var(--gDur, 4.5s) steps(1) var(--gDelay, 0s) infinite;
+}
+.cardActive .glitchB {
+  animation: glitchBurstB var(--gDur, 4.5s) steps(1) var(--gDelay, 0s) infinite;
+}
+
+@keyframes glitchBurstR {
+  0%,  91%  { opacity: 0;    clip-path: none;                transform: translateX(4px); }
+  92%        { opacity: 0.60; clip-path: inset(12% 0 68% 0); transform: translateX(6px)  skewX(0.8deg); }
+  93%        { opacity: 0.45; clip-path: inset(52% 0  8% 0); transform: translateX(-3px) skewX(-1.2deg); }
+  94%        { opacity: 0.55; clip-path: inset(28% 0 42% 0); transform: translateX(8px)  skewX(0.4deg); }
+  95%        { opacity: 0.30; clip-path: inset(68% 0  4% 0); transform: translateX(-5px); }
+  96%        { opacity: 0.50; clip-path: inset( 4% 0 76% 0); transform: translateX(5px)  skewX(-0.6deg); }
+  97%        { opacity: 0.40; clip-path: inset(38% 0 22% 0); transform: translateX(-2px); }
+  98%, 100%  { opacity: 0;    clip-path: none;                transform: translateX(4px); }
+}
+
+@keyframes glitchBurstB {
+  0%,  91%  { opacity: 0;    clip-path: none;                transform: translateX(-4px); }
+  92%        { opacity: 0.50; clip-path: inset(68% 0 12% 0); transform: translateX(-7px) skewX(-0.8deg); }
+  93%        { opacity: 0.60; clip-path: inset( 8% 0 52% 0); transform: translateX(4px)  skewX(1.2deg); }
+  94%        { opacity: 0.40; clip-path: inset(42% 0 28% 0); transform: translateX(-8px) skewX(-0.4deg); }
+  95%        { opacity: 0.55; clip-path: inset( 4% 0 68% 0); transform: translateX(3px); }
+  96%        { opacity: 0.35; clip-path: inset(76% 0  4% 0); transform: translateX(-5px) skewX(0.6deg); }
+  97%        { opacity: 0.45; clip-path: inset(22% 0 38% 0); transform: translateX(2px); }
+  98%, 100%  { opacity: 0;    clip-path: none;                transform: translateX(-4px); }
+}
+
+/* ─────────────────────────────────────────
+   CRT SCANLINES
+   ───────────────────────────────────────── */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent        0px,
+    transparent        3px,
+    rgba(0,0,0,0.14)   3px,
+    rgba(0,0,0,0.14)   4px
+  );
+  animation: none;
+}
+
+.cardActive .scanlines {
+  animation: scanFlicker var(--gDur, 4.5s) steps(1) var(--gDelay, 0s) infinite;
+}
+
+@keyframes scanFlicker {
+  0%,  91%  { opacity: 1;    }
+  92%        { opacity: 0.50; }
+  93%        { opacity: 1;    }
+  94%        { opacity: 0.65; }
+  95%        { opacity: 1;    }
+  96%        { opacity: 0.45; }
+  97%        { opacity: 1;    }
+  100%       { opacity: 1;    }
+}
+
+.grad {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(to top,    rgba(7,7,15,0.72) 0%, rgba(7,7,15,0.20) 45%, transparent 65%),
+    linear-gradient(to bottom, rgba(7,7,15,0.28) 0%, transparent 30%),
+    radial-gradient(ellipse 120% 110% at 50% 50%, transparent 45%, rgba(7,7,15,0.65) 100%);
+}
+
+/* ─────────────────────────────────────────
+   INFO — fixed text on EVERY card
+   Always fully visible, never faded
+   ───────────────────────────────────────── */
+.info {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px;
+  text-align: center;
+  /* Always visible — JS cannot override this */
+  opacity: 1 !important;
+  pointer-events: none;
+}
+
+.tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid transparent;
+  padding: 4px 12px;
+  border-radius: 50px;
+  display: block;
+  width: fit-content;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+
+.title {
+  font-family: 'Courier New', 'Lucida Console', monospace;
+  font-size: clamp(0.80rem, 2vw, 1.10rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  margin: 0;
+  text-shadow:
+    0 0 30px rgba(0,0,0,1),
+    0 2px 10px rgba(0,0,0,1),
+    0 0 2px rgba(0,0,0,1);
+}
+
+.price {
+  font-family: 'Courier New', monospace;
+  font-size: 0.60rem;
+  font-weight: 600;
+  color: rgba(215, 230, 255, 0.75);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 1px 8px rgba(0,0,0,1);
+}
+
+.priceDivider {
+  display: block;
+  width: 22px;
+  height: 1px;
+  border-radius: 1px;
+  opacity: 0.50;
+  margin-top: 2px;
+}
+
+/* Ghost card number */
+.cardNumber {
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: 4px;
+  display: block;
+}
+
+/* ── Scroll hint ── */
+.hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Courier New', monospace;
+  font-size: 0.50rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  z-index: 40;
+  animation: blink 3.5s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 0.08; }
+  50%       { opacity: 0.24; }
+}
+
+/* ─────────────────────────────────────────
+   HOME3 — blank page after last card
+   Add your home3 content here later
+   ───────────────────────────────────────── */
+.home3 {
+  width: 100%;
+  min-height: 100vh;
+  background: #07070f;
+  /* Completely blank — ready for your home3 content */
+}
+
+/* ── Mobile ── */
+@media (max-width: 900px) {
+  .leftPanel { display: none; }
+  .track     { perspective: 600px; margin-left: 0; }
+  .card      { width: 72vw; }
+  .title     { font-size: 0.85rem; }
+}
+@media (max-width: 480px) {
+  .card    { width: 84vw; }
+  .counter { top: 14px; right: 14px; }
+}
