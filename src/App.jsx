@@ -4,16 +4,24 @@ import './styles/responsive.css';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function CustomCursor() {
   const dotRef = useRef(null);
 
   useEffect(() => {
-    // Only run on devices that have a real pointer (mouse/trackpad)
-    // Touch-only devices (phones/tablets) will skip entirely
     const hasPointer = window.matchMedia('(pointer: fine)').matches;
     if (!hasPointer) return;
 
@@ -53,6 +61,7 @@ function CustomCursor() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <CustomCursor />
       <Navbar />
       <Routes>

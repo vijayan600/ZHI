@@ -6,13 +6,13 @@ const plans = [
     number: '01', tag: 'Development', title: 'Website with App',
     price: 'Rs. 2999 To Rs. 5999', unit: 'starting at', color: '#00e5ff',
     features: ['Responsive Design', 'Modern UI / UX', 'Up to 5 Sections', 'Contact Form', 'Basic SEO Setup', '1 Revision Round'],
-    cta: 'Get Started',
+    cta: 'Get Started', popular: true,
   },
   {
     number: '02', tag: 'Motion', title: 'Video Editing',
     price: 'Rs. 999', priceTo: 'Rs. 2,499', unit: 'per project', color: '#ff2d55',
     features: ['Reels & Short-form', 'Color Grading', 'Motion Graphics', 'Background Music', 'Subtitles / Captions', '2 Revision Rounds'],
-    cta: 'Book Now', popular: true,
+    cta: 'Book Now', 
   },
   {
     number: '03', tag: 'Design', title: 'Posters',
