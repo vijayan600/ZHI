@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Navbar.module.css';
 
+// Home-page scroll sections
 const scrollLinks = [
   { label: 'Home',      id: 'home' },
   { label: 'Services',  id: 'services' },
-  { label: 'Portfolio', id: '' },
+  { label: 'Portfolio', id: 'portfolio' },
 ];
 
+// Separate route pages
 const routeLinks = [
   { label: 'Pricing', path: '/pricing' },
   { label: 'Contact', path: '/contact' },
@@ -16,7 +18,8 @@ const routeLinks = [
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 72;
+  const navHeight = 72;
+  const top = el.getBoundingClientRect().top + window.scrollY - navHeight;
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
@@ -25,28 +28,29 @@ export default function Navbar() {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [active,    setActive]    = useState('home');
 
-  const navigate   = useNavigate();
-  const location   = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const isHomePage = location.pathname === '/';
 
-  /* scroll detection */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  /* lock body scroll when menu open */
+export default function Navbar() {
+  const [scrolled,  setScrolled]  = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [active,    setActive]    = useState('home');
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = menuOpen ? 'hidden' : 'unset';
   }, [menuOpen]);
 
-  /* active section observer — home page only */
+  // Only observe scroll sections when on home page
   useEffect(() => {
     if (!isHomePage) return;
     const observer = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }),
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      }),
       { rootMargin: '-30% 0px -60% 0px' }
     );
     scrollLinks.forEach(({ id }) => {
@@ -56,15 +60,12 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, [isHomePage]);
 
-  /* sync active with route */
+  // Set active based on current route
   useEffect(() => {
-    if      (location.pathname === '/pricing') setActive('pricing');
+    if (location.pathname === '/pricing') setActive('pricing');
     else if (location.pathname === '/contact') setActive('contact');
-    else if (location.pathname === '/')        setActive('home');
+    else if (location.pathname === '/') setActive('home');
   }, [location.pathname]);
-
-  /* close menu on route change */
-  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
   const handleScrollClick = (e, id) => {
     e.preventDefault();
@@ -72,17 +73,20 @@ export default function Navbar() {
     if (isHomePage) {
       scrollToSection(id);
     } else {
+      // Navigate home first, then scroll after page loads
       navigate('/');
-      setTimeout(() => scrollToSection(id), 350);
+      setTimeout(() => scrollToSection(id), 300);
     }
   };
 
-  const close = () => setMenuOpen(false);
+  const handleRouteClick = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
 
-      {/* Logo */}
+      {/* ── Logo ── */}
       <a href="/" className={styles.logo} onClick={e => handleScrollClick(e, 'home')}>
         <span className={styles.logoTamil}>ழி</span>
         <div className={styles.logoTextWrap}>
@@ -91,9 +95,10 @@ export default function Navbar() {
         </div>
       </a>
 
-      {/* Nav links */}
+      {/* ── Nav links ── */}
       <ul className={`${styles.links} ${menuOpen ? styles.open : ''}`}>
 
+        {/* Scroll-based links (home page sections) */}
         {scrollLinks.map(({ label, id }) => (
           <li key={id}>
             <a
@@ -106,44 +111,31 @@ export default function Navbar() {
           </li>
         ))}
 
+        {/* Route-based links (separate pages) */}
         {routeLinks.map(({ label, path }) => (
           <li key={path}>
             <Link
               to={path}
               className={`${styles.link} ${location.pathname === path ? styles.linkActive : ''}`}
-              onClick={close}
+              onClick={handleRouteClick}
             >
               {label}
             </Link>
           </li>
         ))}
-
-        {/* Mobile-only CTA — hidden on desktop via CSS */}
-        <li className={styles.mobileCtaItem}>
-          <Link to="/contact" className={styles.mobileCta} onClick={close}>
-            Let's Talk
-          </Link>
-        </li>
-
       </ul>
 
-      {/* Desktop CTA */}
-      <Link to="/contact" className={styles.cta} onClick={close}>
-        Let's Talk
-      </Link>
-
-      {/* Burger */}
-      <button
-        className={styles.burger}
+      {/* ── CTA ── */}
+            <Link to={path} className={styles.link} onClick={handleRouteClick}>
+              {label}
+            </Link>
         onClick={() => setMenuOpen(o => !o)}
-        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={menuOpen}
+        aria-label="Toggle menu"
       >
         <span className={`${styles.burgerLine} ${menuOpen ? styles.burgerOpen : ''}`} />
         <span className={`${styles.burgerLine} ${menuOpen ? styles.burgerOpen : ''}`} />
         <span className={`${styles.burgerLine} ${menuOpen ? styles.burgerOpen : ''}`} />
       </button>
-
     </nav>
   );
 }

@@ -46,3 +46,28 @@ button {
   background: none;
   font-family: inherit;
 }
+/* ── Custom Cursor ── */
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.cursor-dot.cursor-hovered {
+  width: 22px;
+  height: 22px;
+  background: #a78bfa;
+}

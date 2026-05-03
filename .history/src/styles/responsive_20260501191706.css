@@ -1,0 +1,37 @@
+/* Responsive overrides and helpers (import after global.css) */
+
+/* Constrain media to container */
+img, picture, video, iframe, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* A simple centered container used across pages */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Respect device safe areas (iOS notch) */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Prevent accidental horizontal scroll from large elements */
+html, body {
+  overscroll-behavior-x: none;
+}
+
+/* Slightly reduce nav/hero friction on very small screens */
+@media (max-width: 420px) {
+  body { font-size: 14px; }
+  .container { padding-left: 12px; padding-right: 12px; }
+}
+
+/* Handy stack utility for mobile layouts */
+.stack-mobile { display: flex; flex-direction: column; gap: 12px; }

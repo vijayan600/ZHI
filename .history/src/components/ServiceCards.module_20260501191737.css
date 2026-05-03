@@ -13,7 +13,6 @@
   top: 0;
   width: 100%;
   height: 100vh;
-  height: 100svh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -21,6 +20,7 @@
   background: radial-gradient(ellipse 100% 80% at 50% 50%, #0d0c1e 0%, #07070f 65%);
 }
 
+/* ── Ambient blob ── */
 .blob {
   position: absolute;
   width: 420px;
@@ -40,6 +40,7 @@
   transition: background 1.4s ease;
 }
 
+/* ── Particles ── */
 .particles {
   position: absolute;
   inset: 0;
@@ -73,29 +74,6 @@
   width: 200px;
   display: flex;
   flex-direction: column;
-}
-
-/* ── Mobile: anchor to bottom-left, compact layout ── */
-@media (max-width: 1023px) {
-  .leftPanel {
-    left: 16px;
-    bottom: calc(44px + env(safe-area-inset-bottom, 0px));
-    width: 160px;
-    gap: 0;
-  }
-
-  /* Hide the huge ghost number on mobile — wastes space */
-  .leftPanel .lpNumber {
-    display: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .leftPanel {
-    left: 14px;
-    bottom: calc(48px + env(safe-area-inset-bottom, 0px));
-    width: 140px;
-  }
 }
 
 .lpNumber {
@@ -217,9 +195,6 @@
   cursor: pointer;
   padding: 0 3px;
   transition: color 0.2s;
-  /* Prevent tap highlight on mobile */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 .btn:hover { color: rgba(255, 255, 255, 0.80); }
 .counterInner { display: flex; align-items: baseline; gap: 5px; }
@@ -273,9 +248,6 @@
   will-change: transform, opacity, filter, box-shadow;
   background: #0d0d1e;
   cursor: pointer;
-  /* Smooth tap on touch devices */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
 .gloss {
@@ -404,7 +376,8 @@
 }
 
 /* ─────────────────────────────────────────
-   INFO
+   INFO — fixed text on EVERY card
+   Always fully visible, never faded
    ───────────────────────────────────────── */
 .info {
   position: absolute;
@@ -417,6 +390,7 @@
   gap: 6px;
   padding: 18px;
   text-align: center;
+  /* Always visible — JS cannot override this */
   opacity: 1 !important;
   pointer-events: none;
 }
@@ -473,6 +447,7 @@
   margin-top: 2px;
 }
 
+/* Ghost card number */
 .cardNumber {
   font-family: 'Courier New', monospace;
   font-size: 1.5rem;
@@ -503,180 +478,27 @@
   50%       { opacity: 0.24; }
 }
 
+/* ─────────────────────────────────────────
+   HOME3 — blank page after last card
+   Add your home3 content here later
+   ───────────────────────────────────────── */
 .home3 {
   width: 100%;
   min-height: 100vh;
   background: #07070f;
+  /* Completely blank — ready for your home3 content */
 }
 
-.mobileNav { display: none; }   /* shown only inside ≤600px media query */
-
-/* ════════════════════════════════════════
-   RESPONSIVE
-   ════════════════════════════════════════ */
-
-/* ── Tablet ── */
-@media (max-width: 1023px) {
+/* ── Mobile ── */
+@media (max-width: 900px) {
+  .leftPanel { display: none; }
   .track     { perspective: 600px; margin-left: 0; }
-  .card      { width: 46vw; aspect-ratio: 16 / 10; }
-  .title     { font-size: 0.9rem; }
+  /* smaller cards on tablet so multiple feel visible */
+  .card      { width: 48vw; }
+  .title     { font-size: 0.85rem; }
 }
-
-/* ── Mobile landscape / small tablet ── */
-@media (max-width: 600px) {
-  .stage {
-    /* Use svh so the browser chrome doesn't clip the sticky stage */
-    height: 100svh;
-  }
-
-  .track {
-    perspective: 500px;
-    margin-left: 0;
-    transform: translateY(-12vh);
-  }
-
-  .card {
-    width: 48vw;
-    aspect-ratio: 16 / 10;
-    border-radius: 10px;
-  }
-
-  .title {
-    font-size: clamp(0.65rem, 3vw, 0.85rem);
-  }
-
-  .price {
-    font-size: 0.52rem;
-  }
-
-  .tag {
-    font-size: 0.44rem;
-    padding: 3px 8px;
-    letter-spacing: 0.16em;
-  }
-
-  .info {
-    gap: 5px;
-    padding: 12px;
-  }
-
-  /* Counter — anchor to top-left on mobile so it doesn't overlap the cards */
-  .counter {
-    top: 14px;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 5px 12px;
-    gap: 6px;
-  }
-
-  .counterCurrent {
-    font-size: 0.75rem;
-    min-width: 18px;
-  }
-
-  .counterSlash,
-  .counterTotal {
-    font-size: 0.46rem;
-  }
-
-  .btn {
-    font-size: 1.1rem; /* keep tap-friendly */
-    padding: 2px 6px;
-    min-width: 28px;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Bottom mini-nav strip — replaces left panel on mobile */
-  .mobileNav {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 40;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
-    background: linear-gradient(to top, rgba(7,7,15,0.95) 0%, rgba(7,7,15,0.60) 60%, transparent 100%);
-    pointer-events: none;
-  }
-
-  .mobileDot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.18);
-    flex-shrink: 0;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.25s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .mobileDotActive {
-    transform: scale(1.6);
-  }
-
-  .hint {
-    font-size: 0.42rem;
-    letter-spacing: 0.16em;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .blob {
-    width: 240px;
-    height: 140px;
-  }
-}
-
-/* ── Tiny phones (≤380px) ── */
-@media (max-width: 380px) {
-  .card {
-    width: 54vw;
-    aspect-ratio: 16 / 10;
-  }
-
-  .track {
-    transform: translateY(-12vh);
-  }
-
-  .counter {
-    padding: 4px 10px;
-  }
-}
-
-/* ── Landscape mobile — restore 16/10 ratio, reduce track shift ── */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
-  .stage {
-    height: 100svh;
-  }
-
-  .track {
-    perspective: 480px;
-    margin-left: 0;
-    transform: none;
-  }
-
-  .card {
-    width: 46vw;
-    aspect-ratio: 16 / 10;
-    border-radius: 10px;
-  }
-
-  .counter {
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    right: auto;
-    padding: 4px 10px;
-  }
-
-  .hint {
-    bottom: 8px;
-  }
+@media (max-width: 480px) {
+  /* mobile: slightly smaller than full width so edges show */
+  .card    { width: 70vw; }
+  .counter { top: 14px; right: 14px; }
 }

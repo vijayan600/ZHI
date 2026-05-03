@@ -1,14 +1,18 @@
+/* ═══════════════════════════════════════════
+   Navbar.module.css
+═══════════════════════════════════════════ */
+
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 200;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 22px 48px;
-  transition: all 0.4s ease;
+  transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease;
   background: rgba(8, 8, 13, 0.25);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -17,7 +21,7 @@
 
 .nav.scrolled {
   padding: 14px 48px;
-  background: rgba(8, 8, 13, 0.55);
+  background: rgba(8, 8, 13, 0.75);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -28,17 +32,20 @@
   gap: 12px;
   text-decoration: none;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1100;
 }
 
 .logoTamil {
   font-size: 2.2rem;
   font-weight: 900;
   line-height: 1;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  /* Use color instead of background-clip so the glyph never gets clipped */
+  color: var(--gold, #c9a227);
   filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.55));
+  /* Extra padding so the glow doesn't get cut */
+  padding: 2px 4px;
+  display: inline-block;
 }
 
 .logoTextWrap {
@@ -63,7 +70,7 @@
   text-transform: uppercase;
 }
 
-/* ── Links ── */
+/* ── Desktop nav links ── */
 .links {
   display: flex;
   align-items: center;
@@ -71,6 +78,11 @@
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/* Hide mobile-only CTA on desktop */
+.mobileCtaItem {
+  display: none;
 }
 
 .link {
@@ -96,15 +108,13 @@
   transition: width 0.3s ease;
 }
 
-.link:hover {
-  color: var(--text-primary);
-}
+.link:hover { color: var(--text-primary); }
+.link:hover::after { width: 100%; }
 
-.link:hover::after {
-  width: 100%;
-}
+.linkActive { color: var(--text-primary) !important; }
+.linkActive::after { width: 100% !important; }
 
-/* ── CTA ── */
+/* ── Desktop CTA ── */
 .cta {
   font-family: var(--font-display);
   font-size: 0.78rem;
@@ -119,6 +129,8 @@
   box-shadow: 0 0 22px var(--accent-glow);
   text-decoration: none;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1100;
 }
 
 .cta:hover {
@@ -130,65 +142,156 @@
 /* ── Burger ── */
 .burger {
   display: none;
-  flex-direction: column;
-  gap: 5px;
-  padding: 4px;
   background: none;
   border: none;
   cursor: pointer;
+  position: relative;
+  z-index: 1100;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .burgerLine {
-  width: 22px;
-  height: 1.5px;
+  width: 24px;
+  height: 2px;
   background: var(--text-primary);
-  display: block;
-  transition: all 0.3s ease;
-  transform-origin: center;
+  position: absolute;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Mobile ── */
+.burgerLine:nth-child(1) { transform: translateY(-8px); }
+.burgerLine:nth-child(2) { transform: translateY(0); }
+.burgerLine:nth-child(3) { transform: translateY(8px); }
+
+.burgerOpen:nth-child(1) { transform: translateY(0) rotate(45deg); }
+.burgerOpen:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burgerOpen:nth-child(3) { transform: translateY(0) rotate(-45deg); }
+
+/* ════════════════════════════════════════
+   MOBILE
+   ════════════════════════════════════════ */
 @media (max-width: 768px) {
+
   .nav {
-    padding: 18px 24px;
+    padding: 16px 20px;
   }
 
   .nav.scrolled {
-    padding: 12px 24px;
+    padding: 12px 20px;
   }
 
+  /* Hide desktop CTA pill */
+  .cta { display: none; }
+
+  /* Hide tagline */
+  .logoTagline { display: none; }
+
+  /* Smaller logo — keep padding so glyph isn't clipped */
+  .logoTamil {
+    font-size: 1.8rem;
+    padding: 2px 4px;
+  }
+  .logoName { font-size: 0.74rem; letter-spacing: 0.16em; }
+
+  /* Show burger */
+  .burger { display: flex; }
+
+  /* ── Full-screen overlay menu ── */
   .links {
-    display: none;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(6, 6, 10, 0.98);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+
+    z-index: 1050;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .links.open {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-    z-index: 150;
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
   }
 
-  .links.open .link {
-    font-size: 1.4rem;
-    letter-spacing: 0.15em;
+  .links li {
+    width: 100%;
+    text-align: center;
   }
 
-  .burger {
-    display: flex;
-    z-index: 300;
-    position: relative;
+  .links .link {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+    transition: color 0.2s ease, transform 0.2s ease;
   }
 
-  .cta {
-    display: none;
+  .links .link:hover,
+  .links .linkActive {
+    color: var(--text-primary);
+    transform: scale(1.04);
   }
 
-  .logoTagline {
-    display: none;
+  .links .link::after { display: none; }
+
+  .mobileCtaItem {
+    display: block;
+    margin-top: 20px;
   }
+
+  .mobileCta {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 13px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 0 28px var(--accent-glow);
+    transition: all 0.3s ease;
+  }
+
+  .mobileCta:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+}
+
+@media (max-width: 380px) {
+  .nav { padding: 14px 16px; }
+  .logoTamil { font-size: 1.6rem; padding: 2px 4px; }
+  .logoName  { font-size: 0.68rem; }
+  .links .link { font-size: 1.35rem; }
 }

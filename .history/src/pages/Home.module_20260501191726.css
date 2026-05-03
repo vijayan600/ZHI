@@ -1,0 +1,160 @@
+.home {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* ── UnicornStudio full-bleed canvas ── */
+.splineWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* Clips bottom of iframe — hides "Made with unicorn.studio" watermark */
+  clip-path: inset(0 0 67px 0);
+}
+
+.spline {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fallback loader */
+.splineFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.loader {
+  display: flex;
+  gap: 8px;
+}
+
+.loader span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40%           { opacity: 1;   transform: scale(1); }
+}
+
+/* ── Dark fade at bottom of hero ── */
+.heroFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── Hero CTA buttons — bottom left ── */
+.heroContent {
+  position: relative;
+  z-index: 10;
+  padding: 0 48px 48px;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 14px 32px;
+  border-radius: 100px;
+  box-shadow: 0 0 32px var(--accent-glow);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 48px var(--accent-glow);
+}
+
+.btnGhost {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 14px 32px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+}
+
+.btnGhost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .heroContent {
+    padding: 0 24px 36px;
+  }
+}
+
+/* Last scene container — centers and constrains the embedded scene */
+.lastSection {
+  width: 100%;
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.lastScene {
+  width: 100%;
+  max-width: 1440px;
+  height: 900px;
+}
+
+@media (max-width: 900px) {
+  .lastScene { height: 560px; }
+}
+
+@media (max-width: 480px) {
+  .lastScene { height: 420px; }
+}

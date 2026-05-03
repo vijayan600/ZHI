@@ -4,15 +4,9 @@ import styles from './Home.module.css';
 import StatBadge    from '../components/StatBadge';
 import ServiceCards from '../components/ServiceCards';
 
-const SCENE_W = 1440;
-const SCENE_H = 900;
-
 export default function Home() {
-  const heroContentRef  = useRef(null);
-  const lastSectionRef  = useRef(null);
-  const lastScalerRef   = useRef(null);
+  const heroContentRef = useRef(null);
 
-  // Hero entrance animation
   useEffect(() => {
     const el = heroContentRef.current;
     if (!el) return;
@@ -26,34 +20,13 @@ export default function Home() {
     return () => clearTimeout(t);
   }, []);
 
-  // Scale last UnicornScene to fill viewport width
-  useEffect(() => {
-    const section = lastSectionRef.current;
-    const scaler  = lastScalerRef.current;
-    if (!section || !scaler) return;
-
-    const apply = () => {
-      const vw     = window.innerWidth;
-      const scale  = vw / SCENE_W;
-      // On desktop (>768px) clip-path cuts 67px off the bottom visually,
-      // so add it back to the container so the scene isn't short.
-      // On mobile clip-path is none so no offset needed.
-      const clip   = vw > 768 ? 67 : 0;
-      const h      = Math.round(SCENE_H * scale) + clip;
-      scaler.style.transform = `scale(${scale})`;
-      section.style.height   = `${h}px`;
-    };
-
-    apply();
-    window.addEventListener('resize', apply);
-    return () => window.removeEventListener('resize', apply);
-  }, []);
-
   return (
-    <div style={{ position: 'relative', zIndex: 1, marginBottom: 0, display: 'block' }}>
+    <div style={{ position: 'relative', zIndex: 1 }}>
 
       {/* ─── HERO ─── */}
       <main className={styles.home} id="home">
+
+        {/* UnicornStudio background */}
         <div className={styles.splineWrap}>
           <UnicornScene
             projectId="vptFtFBhE3xURmEwlJHQ"
@@ -80,20 +53,27 @@ export default function Home() {
       {/* ─── SERVICES ─── */}
       <ServiceCards />
 
-      {/* ─── LAST SECTION ───
-          .lastSection     : container, height driven by JS
-          .lastSceneScaler : 1440×900 inner, scaled via JS transform
-      ── */}
-      <div ref={lastSectionRef} className={styles.lastSection}>
-        <div ref={lastScalerRef} className={styles.lastSceneScaler}>
+      {/* ─── LAST SECTION ─── */}
+      <div className={styles.lastSection}>
+        <div className={styles.lastScene}>
           <UnicornScene
             projectId="nxRmN60IxP5wG9DViYFz"
-            width={SCENE_W}
-            height={SCENE_H}
+            width="100%"
+            height="100%"
             scale={1}
             dpi={1.5}
             sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@2.1.11/dist/unicornStudio.umd.js"
           />
+          {/* Centered glass CTA */}
+          <div className={styles.lastCard}>
+            <div className="left">
+              <h3>Bring your idea to life</h3>
+              <p>Hands-on design & editing — quick delivery, premium polish. Check our pricing or reach out for a custom quote.</p>
+            </div>
+            <div className="right">
+              <a href="/pricing" className={styles.btnPrimary}>See Plans</a>
+            </div>
+          </div>
         </div>
       </div>
 

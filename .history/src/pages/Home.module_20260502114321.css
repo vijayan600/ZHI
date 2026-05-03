@@ -2,7 +2,6 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  height: 100svh;
   min-height: 600px;
   overflow: hidden;
   display: flex;
@@ -68,24 +67,6 @@
   pointer-events: none;
 }
 
-.heroFloor {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .heroFloor {
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 52px;
-    background: var(--bg, #07070f);
-    z-index: 6;
-    pointer-events: none;
-  }
-}
-
 .heroContent {
   position: relative;
   z-index: 10;
@@ -113,8 +94,6 @@
   box-shadow: 0 0 32px var(--accent-glow);
   transition: all 0.3s ease;
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
 .btnPrimary:hover {
@@ -135,8 +114,6 @@
   transition: all 0.3s ease;
   backdrop-filter: blur(8px);
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
 .btnGhost:hover {
@@ -145,66 +122,72 @@
   background: var(--accent-dim);
 }
 
-/* ─────────────────────────────────────────
-   LAST SECTION
-   ───────────────────────────────────────── */
 .lastSection {
   width: 100%;
-  height: 62.5vw;
-  max-height: 900px;
-  min-height: 180px;
+  height: 700px;
   overflow: hidden;
-  clip-path: inset(0 0 11px 0);
+  clip-path: inset(0 0 200px 0);
   display: block;
   margin: 0;
   padding: 0;
+}
+
+/* Last scene container (3D canvas) */
+.lastScene {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-@media (max-width: 768px) {
-  .lastSection {
-    width: 100%;
-    height: 62.5vw;
-    max-height: 900px;
-    min-height: 180px;
-    overflow: hidden;
-    clip-path: inset(0 0 20px 0);
-    display: block;
-    margin: 0;
-    padding: 0;
-    position: relative;
-  }
-}
-
-.lastSceneScaler {
+/* Centered glass CTA card over the last scene */
+.lastCard {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1440px;
-  height: 900px;
-  transform-origin: top left;
-  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(920px, 92%);
+  max-width: 980px;
+  padding: 26px 28px;
+  border-radius: 22px;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 12px 40px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  z-index: 20;
 }
 
-/* ════════════════════════════════════════
-   RESPONSIVE
-   ════════════════════════════════════════ */
+.lastCard .left {
+  flex: 1 1 380px;
+}
+.lastCard .right {
+  flex: 0 0 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* ── Tablet ── */
+.lastCard h3 { margin: 0 0 6px; font-size: 1.1rem; }
+.lastCard p { margin: 0; color: var(--text-secondary); }
+
+@media (max-width: 900px) {
+  .lastCard { padding: 18px; border-radius: 16px; width: 94%; left: 50%; top: 58%; }
+  .lastCard .right { display: none; }
+}
+
+/* ── Mobile — hero stays full screen, buttons scale down ── */
 @media (max-width: 768px) {
   .home {
+    /* keep 100vh — hero stays big */
     min-height: 100svh;
     align-items: flex-end;
   }
 
-  .splineWrap {
-    clip-path: inset(0 0 0px 0);
-    transform: scale(2);
-    transform-origin: center center;
-  }
-
   .heroContent {
-    padding: 0 20px calc(40px + env(safe-area-inset-bottom, 0px));
+    padding: 0 20px 40px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -225,50 +208,23 @@
   }
 
   .heroFade {
-    height: 320px;
+    height: 280px;
+  }
+
+  .lastSection {
+    height: 300px;
+    clip-path: inset(0 0 100px 0);
   }
 }
 
-/* ── Mobile ── */
 @media (max-width: 480px) {
   .heroContent {
-    padding: 0 16px calc(32px + env(safe-area-inset-bottom, 0px));
+    padding: 0 16px 32px;
   }
 
   .btnPrimary,
   .btnGhost {
-    font-size: 0.8rem;
-    padding: 20px 30px;
-  }
-
-  .heroFade {
-    height: 260px;
-  }
-
-  .splineWrap {
-    clip-path: inset(0 0 0px 0);
-    transform: scale(2.5);
-    transform-origin: center center;
-  }
-}
-
-/* ── Landscape mobile ── */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
-  .home {
-    min-height: 100svh;
-  }
-
-  .heroContent {
-    padding: 0 24px calc(20px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .heroFade {
-    height: 160px;
-  }
-
-  .btnPrimary,
-  .btnGhost {
-    font-size: 0.66rem;
-    padding: 8px 16px;
+    font-size: 0.68rem;
+    padding: 10px 18px;
   }
 }

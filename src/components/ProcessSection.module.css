@@ -1,6 +1,5 @@
 /* ─────────────────────────────────────────
    ProcessSection.module.css
-   Royal purple line · Glass CTA · Portal arch
    ───────────────────────────────────────── */
 
 .section {
@@ -26,6 +25,7 @@
   margin-bottom: 100px;
   position: relative;
   z-index: 2;
+  padding: 0 24px;
 }
 
 .headerTag {
@@ -80,7 +80,7 @@
   border-radius: 4px;
 }
 
-/* ── Animated royal purple fill ── */
+/* ── Animated fill ── */
 .lineFill {
   position: absolute;
   top: 0;
@@ -167,7 +167,7 @@
 }
 
 .cardLeft  { left: 0;  text-align: right; padding-right: 40px; }
-.cardRight { right: 0; text-align: left;  padding-left: 40px;  }
+.cardRight { right: 0; text-align: left;  padding-left: 40px; }
 
 .cardVisible {
   opacity: 1;
@@ -238,6 +238,7 @@
   gap: 24px;
   position: relative;
   z-index: 2;
+  padding-bottom: 20px;
 }
 
 .footerText {
@@ -248,7 +249,7 @@
   color: rgba(255, 255, 255, 0.18);
 }
 
-/* ── Glassmorphism Royal CTA ── */
+/* ── CTA button ── */
 .cta {
   position: relative;
   display: inline-flex;
@@ -281,7 +282,6 @@
   z-index: 2;
 }
 
-/* Shimmer layer */
 .cta::before {
   content: '';
   position: absolute;
@@ -296,7 +296,6 @@
   pointer-events: none;
 }
 
-/* Top glint line */
 .cta::after {
   content: '';
   position: absolute;
@@ -323,7 +322,7 @@
   transform: translateY(-2px);
 }
 
-/* ── Portal arch glow ── */
+/* ── Portal ── */
 .portalWrapper {
   position: relative;
   width: 520px;
@@ -370,24 +369,48 @@
   to   { opacity: 1; }
 }
 
-/* ── Mobile ── */
-@media (max-width: 700px) {
-  .timeline { padding: 0 16px; }
+/* ════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ════════════════════════════════════════ */
+
+/* Tablet ≤ 768px
+   .timeline padding-left = 20px
+   .track left = 28px (from .timeline content edge), transform:none → left edge at 28px, center at 30px
+   .dot  left = 30px + translateX(-50%) → dot center = 30px ✓ perfectly on track center
+   .step padding-left = 30px center + 10px half-dot + 12px gap = 52px
+*/
+@media (max-width: 768px) {
+  .section {
+    padding: 80px 0 60px;
+  }
+
+  .header {
+    margin-bottom: 60px;
+  }
+
+  .headerTitle {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  .timeline {
+    padding: 0 20px;
+  }
 
   .track {
     left: 28px;
     transform: none;
-    width: 4px;
-  }
-
-  .step {
-    min-height: 180px;
-    padding-left: 60px;
   }
 
   .dot {
-    left: 28px;
+    left: 30px;
     transform: translateX(-50%);
+  }
+
+  .step {
+    min-height: 160px;
+    padding-left: 52px;
+    align-items: flex-start;
+    padding-top: 8px;
   }
 
   .card {
@@ -399,7 +422,10 @@
     padding: 0 !important;
   }
 
-  .cardLeft .cardList li::after { display: none; }
+  .cardLeft  { text-align: left !important; padding-right: 0 !important; }
+  .cardRight { text-align: left !important; padding-left: 0 !important; }
+
+  .cardLeft .cardList li::after  { display: none; }
   .cardRight .cardList li::before,
   .cardLeft .cardList li::before {
     content: '•';
@@ -407,8 +433,126 @@
     color: rgba(139, 92, 246, 0.65);
   }
 
+  .cardTitle {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+  }
+
+  .cardList li {
+    font-size: 0.62rem;
+  }
+
+  .footer {
+    margin-top: 60px;
+    padding: 0 24px 20px;
+  }
+
+  .cta {
+    font-size: 0.65rem;
+    padding: 12px 32px;
+    letter-spacing: 0.16em;
+  }
+
   .portalWrapper {
-    width: 320px;
-    height: 180px;
+    width: 90vw;
+    max-width: 360px;
+    height: 200px;
+  }
+
+  .portalBloom {
+    width: 280px;
+    height: 130px;
+  }
+}
+
+/* Mobile ≤ 480px
+   .timeline padding-left = 16px
+   .track left = 20px, transform:none → left edge at 20px, center at 22px
+   .dot  left = 22px + translateX(-50%) → dot center = 22px ✓
+   .step padding-left = 22px + 10px + 12px = 44px
+*/
+@media (max-width: 480px) {
+  .section {
+    padding: 60px 0 50px;
+  }
+
+  .header {
+    margin-bottom: 48px;
+    padding: 0 16px;
+  }
+
+  .headerTag {
+    font-size: 0.52rem;
+    letter-spacing: 0.2em;
+  }
+
+  .headerTitle {
+    font-size: clamp(1.4rem, 7vw, 1.8rem);
+  }
+
+  .headerSub {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .timeline {
+    padding: 0 16px;
+  }
+
+  .track {
+    left: 20px;
+    transform: none;
+  }
+
+  .dot {
+    left: 22px;
+    transform: translateX(-50%);
+  }
+
+  .step {
+    min-height: 140px;
+    padding-left: 44px;
+  }
+
+  .dotInner {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dotGlow {
+    width: 26px;
+    height: 26px;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .cardDays {
+    font-size: 0.48rem;
+    letter-spacing: 0.16em;
+  }
+
+  .cardList li {
+    font-size: 0.58rem;
+  }
+
+  .footer {
+    margin-top: 48px;
+    padding: 0 16px 16px;
+  }
+
+  .cta {
+    font-size: 0.90rem;
+    padding: 11px 26px;
+    letter-spacing: 0.14em;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+
+  .portalWrapper {
+    width: 85vw;
+    height: 160px;
   }
 }

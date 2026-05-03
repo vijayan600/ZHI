@@ -3,12 +3,12 @@ import styles from './ServiceCards.module.css';
 import ProcessSection from './ProcessSection';
 
 const services = [
-  { number: '01', title: 'Web Pages',           desc: 'Starting at Rs.1000', tag: 'Development', video: '/videos/01-web.mp4',       color: '#00e5ff' },
-  { number: '02', title: 'Video Editing',        desc: 'Rs.1000 to Rs.2500',  tag: 'Motion',      video: '/videos/02-video.mp4',      color: '#ff2d55' },
-  { number: '03', title: 'Posters',              desc: 'Rs.200 to Rs.300',    tag: 'Design',      video: '/videos/03-poster.mp4',     color: '#f59e0b' },
-  { number: '04', title: 'Birthday Invitations', desc: 'Rs.100 to Rs.150',    tag: 'Print',       video: '/videos/04-invitation.mp4', color: '#a855f7' },
-  { number: '05', title: 'Birthday Magazines',   desc: '10 pages – Rs.1000',  tag: 'Print',       video: '/videos/05-magazine.mp4',   color: '#10b981' },
-  { number: '06', title: 'Custom Gift Cards',    desc: 'Rs.250 to Rs.300',    tag: 'Design',      video: '/videos/06-giftcard.mp4',   color: '#ff6b6b' },
+  { number: '01', title: 'Websites with App',           desc: 'Rs.2999 to Rs.5999', tag: 'Development', video: '/videos/01-web.mp4',       color: '#00e5ff' },
+  { number: '02', title: 'Video Editing',        desc: 'Rs.999 to Rs.2499',  tag: 'Motion',      video: '/videos/02-video.mp4',      color: '#ff2d55' },
+  { number: '03', title: 'Posters',              desc: 'Rs.199 to Rs.299',    tag: 'Design',      video: '/videos/03-poster.mp4',     color: '#f59e0b' },
+  { number: '04', title: 'Birthday Invitations', desc: 'Rs.99 to Rs.149',    tag: 'Print',       video: '/videos/04-invitation.mp4', color: '#a855f7' },
+  { number: '05', title: 'Birthday Magazines',   desc: '10 pages – Rs.999',  tag: 'Print',       video: '/videos/05-magazine.mp4',   color: '#10b981' },
+  { number: '06', title: 'Custom Gift Cards',    desc: 'Rs.249 to Rs.299',    tag: 'Design',      video: '/videos/06-giftcard.mp4',   color: '#ff6b6b' },
 ];
 
 const N = services.length;
@@ -27,9 +27,20 @@ const TOTAL_VH    = N * VH_PER_CARD;
 
 function lerp(a, b, t) { return a + (b - a) * t; }
 
+function getRadius() {
+  const w = window.innerWidth;
+  if (w <= 380) return 240;
+  if (w <= 480) return 260;
+  if (w <= 600) return 300;
+  if (w <= 900) return 380;
+  return 480;
+}
+
 function getCircularStyle(index, floatIndex) {
-  const radius = 480;
-  const spread = Math.PI * 1.2;
+  const radius = getRadius();
+  const w = window.innerWidth;
+  // Wider fan on mobile so cards don't touch
+  const spread = w <= 900 ? Math.PI * 1.5 : Math.PI * 1.2;
   const step   = spread / (N - 1);
   const angle  = (index - floatIndex) * step;
   const x      = Math.sin(angle) * radius;
@@ -66,14 +77,12 @@ export default function ServiceCards() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-
     const onScroll = () => {
       const rootTopPx = root.getBoundingClientRect().top + window.scrollY;
       const relPx     = window.scrollY - rootTopPx;
       const relVh     = (relPx / window.innerHeight) * 100;
       targetRef.current = Math.max(0, Math.min(relVh, TOTAL_VH));
     };
-
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -81,9 +90,7 @@ export default function ServiceCards() {
   useEffect(() => {
     const tick = () => {
       smoothRef.current = lerp(smoothRef.current, targetRef.current, 0.09);
-
       const f = Math.max(0, Math.min(smoothRef.current / VH_PER_CARD, N - 1));
-
       const newActive = Math.min(Math.round(f), N - 1);
       setActive(prev => (prev !== newActive ? newActive : prev));
 
@@ -92,7 +99,8 @@ export default function ServiceCards() {
         const p     = getCircularStyle(i, f);
         const color = services[i].color;
 
-        if (p.z < -200) { el.style.opacity = '0'; return; }
+        const hideThreshold = getRadius() * -0.4;
+        if (p.z < hideThreshold) { el.style.opacity = '0'; return; }
 
         el.style.opacity   = String(p.opacity);
         el.style.transform =
@@ -100,7 +108,8 @@ export default function ServiceCards() {
         el.style.filter    = `blur(${Math.max(0, (1 - p.scale) * 5).toFixed(2)}px)`;
         el.style.zIndex    = String(Math.round(100 + p.z));
 
-        if (p.z > 280) {
+        const glowThreshold = getRadius() * 0.58;
+        if (p.z > glowThreshold) {
           el.style.boxShadow   = `0 0 50px ${color}44, 0 0 110px ${color}18`;
           el.style.borderColor = `${color}55`;
         } else {
@@ -119,10 +128,7 @@ export default function ServiceCards() {
   }, []);
 
   useEffect(() => {
-    videoRefs.current.forEach(v => {
-      if (!v) return;
-      v.play().catch(() => {});
-    });
+    videoRefs.current.forEach(v => { if (v) v.play().catch(() => {}); });
   }, []);
 
   const goTo = useCallback(i => {
@@ -138,7 +144,6 @@ export default function ServiceCards() {
 
   return (
     <>
-      {/* ── Services sticky scroll section ── */}
       <div
         ref={rootRef}
         className={styles.root}
@@ -180,7 +185,7 @@ export default function ServiceCards() {
           </div>
 
           <div className={styles.counter}>
-            <button className={styles.btn} onClick={() => goTo(active - 1)}>‹</button>
+            <button className={styles.btn} onClick={() => goTo(active - 1)} aria-label="Previous">‹</button>
             <div className={styles.counterInner}>
               <span className={styles.counterCurrent} style={{ color: s.color }}>
                 {String(active + 1).padStart(2, '0')}
@@ -188,7 +193,7 @@ export default function ServiceCards() {
               <span className={styles.counterSlash}>/</span>
               <span className={styles.counterTotal}>{String(N).padStart(2, '0')}</span>
             </div>
-            <button className={styles.btn} onClick={() => goTo(active + 1)}>›</button>
+            <button className={styles.btn} onClick={() => goTo(active + 1)} aria-label="Next">›</button>
           </div>
 
           <div className={styles.track}>
@@ -203,19 +208,16 @@ export default function ServiceCards() {
                   onClick={() => goTo(i)}
                 >
                   <div className={styles.gloss} />
-
                   <video
                     ref={el => (videoRefs.current[i] = el)}
                     className={styles.video}
                     src={svc.video}
                     muted loop playsInline
                   />
-
                   <div className={`${styles.glitchLayer} ${styles.glitchR}`} />
                   <div className={`${styles.glitchLayer} ${styles.glitchB}`} />
                   <div className={styles.scanlines} aria-hidden="true" />
                   <div className={styles.grad} />
-
                   <div className={styles.info}>
                     <span
                       className={styles.tag}
@@ -231,11 +233,24 @@ export default function ServiceCards() {
             })}
           </div>
 
+          {/* ── Mobile dot navigation (replaces left panel on ≤600px) ── */}
+          <div className={styles.mobileNav} aria-label="Service navigation">
+            {services.map((svc, i) => (
+              <span
+                key={svc.number}
+                className={`${styles.mobileDot} ${i === active ? styles.mobileDotActive : ''}`}
+                style={{ background: i === active ? svc.color : undefined }}
+                onClick={() => goTo(i)}
+                role="button"
+                aria-label={svc.title}
+              />
+            ))}
+          </div>
+
           <p className={styles.hint}>scroll to explore</p>
         </div>
       </div>
 
-      {/* ── Process Section — replaces the blank home3 ── */}
       <ProcessSection />
     </>
   );
